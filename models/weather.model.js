@@ -91,4 +91,45 @@ Weather.minMaxTemp = (locationName, result)=>{
     });
 }
 
+Weather.getMinTemp = (locationName, result)=>{
+    sql.query(
+        `
+            SELECT *
+            FROM weather
+            JOIN locations ON weather.location_id = locations.location_id
+            WHERE locations.name = ?
+            ORDER BY temperature_c ASC
+            LIMIT 1;
+        `,
+        [locationName],
+        (err, res)=>{
+            if(err){
+                console.log(err);
+                return result(err, null);
+            }
+            return result(null, res);
+        }
+    )
+}
+
+Weather.getMaxTemp = (locationName, result)=>{
+    sql.query(
+        `
+            SELECT *
+            FROM weather
+            JOIN locations ON weather.location_id = locations.location_id
+            WHERE locations.name = ?
+            ORDER BY temperature_c DESC
+            LIMIT 1;
+        `,
+        [locationName],
+        (err, res)=>{
+            if(err){
+                console.log(err);
+                return result(err, null);
+            }
+            return result(null, res);
+        }
+    )
+}
 module.exports = Weather;
